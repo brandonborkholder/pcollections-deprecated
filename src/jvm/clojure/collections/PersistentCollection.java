@@ -9,9 +9,9 @@ package clojure.collections;
  * must not remove this notice, or any other, from this software.
  */
 public interface PersistentCollection<T> extends Iterable<T> {
-	PersistentCollection<T> cons(T value);
+	PersistentCollection<T> with(T value);
 
-	PersistentCollection<T> consAll(Iterable<? extends T> iterable);
+	PersistentCollection<T> withAll(Iterable<? extends T> iterable);
 
 	PersistentCollection<T> without(Object value);
 
@@ -19,7 +19,7 @@ public interface PersistentCollection<T> extends Iterable<T> {
 
 	boolean contains(Object value);
 
-	boolean containsAll(Iterable<? extends T> iterable);
+	boolean containsAll(Iterable<?> iterable);
 
 	int size();
 

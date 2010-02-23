@@ -11,11 +11,13 @@ import java.util.Map.Entry;
  * must not remove this notice, or any other, from this software.
  */
 public interface PersistentMap<K, V> extends Iterable<Entry<K, V>> {
-	PersistentMap<K, V> assoc(K key, V value);
+	PersistentMap<K, V> with(K key, V value);
 
-	PersistentMap<K, V> assocAll(Iterable<Entry<K, V>> iterable);
+	PersistentMap<K, V> withAll(Iterable<? extends Entry<? extends K, ? extends V>> iterable);
 
 	PersistentMap<K, V> without(Object key);
+
+	PersistentMap<K, V> withoutAll(Iterable<? extends Entry<? extends K, ? extends V>> iterable);
 
 	PersistentSet<K> keySet();
 

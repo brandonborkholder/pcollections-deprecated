@@ -11,11 +11,21 @@ package clojure.collections;
 public interface PersistentList<T> extends PersistentCollection<T> {
 	T get(int index);
 
-	PersistentList<T> assoc(int index, T value);
+	PersistentList<T> with(T value);
+
+	PersistentList<T> withAll(Iterable<? extends T> values);
+
+	PersistentList<T> with(int index, T value);
 
 	int indexOf(Object value);
 
 	int lastIndexOf(Object value);
+
+	PersistentList<T> without(Object value);
+
+	PersistentList<T> withoutAll(Iterable<?> values);
+
+	PersistentList<T> without(int index);
 
 	PersistentList<T> subList(int fromIndex, int toIndex);
 }

@@ -9,4 +9,11 @@ package clojure.collections;
  * must not remove this notice, or any other, from this software.
  */
 public interface PersistentSet<T> extends PersistentCollection<T> {
+	PersistentSet<T> with(T value);
+
+	PersistentSet<T> withAll(Iterable<? extends T> values);
+
+	PersistentSet<T> without(Object value);
+
+	PersistentSet<T> withoutAll(Iterable<?> values);
 }
