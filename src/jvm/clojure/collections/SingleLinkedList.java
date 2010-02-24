@@ -1,123 +1,196 @@
 package clojure.collections;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
-public class SingleLinkedList<T> extends AbstractCollection<T>
-		implements
-			PersistentStack<T> {
-	public static final SingleLinkedList EMPTY = new Empty();
+/**
+ * Copyright (c) Brandon Borkholder. All rights reserved. The use and
+ * distribution terms for this software are covered by the Eclipse Public
+ * License 1.0 (http://opensource.org/licenses/eclipse-1.0.php) which can be
+ * found in the file epl-v10.html at the root of this distribution. By using
+ * this software in any fashion, you are agreeing to be bound by the terms of
+ * this license. You must not remove this notice, or any other, from this
+ * software.
+ */
+public class SingleLinkedList<T> extends AbstractCollection<T> implements PersistentStack<T> {
+  private static final SingleLinkedList EMPTY = new Empty();
 
-	protected final T value;
+  protected final T value;
 
-	protected final SingleLinkedList<T> next;
+  protected final SingleLinkedList<T> next;
 
-	public static <T> SingleLinkedList<T> empty() {
-		return EMPTY;
-	}
+  public static <T> SingleLinkedList<T> empty() {
+    return EMPTY;
+  }
 
-	protected SingleLinkedList(SingleLinkedList<T> next, T value) {
-		this.next = next;
-		this.value = value;
-	}
+  protected SingleLinkedList(SingleLinkedList<T> next, T value) {
+    this.next = next;
+    this.value = value;
+  }
 
-	protected SingleLinkedList() {
-		this(null, null);
-	}
+  protected SingleLinkedList() {
+    this(null, null);
+  }
 
-	@Override
-	public boolean contains(Object value) {
-		return this.value == value
-				|| (this.value != null && this.value.equals(value))
-				|| next.contains(value);
-	}
+  @Override
+  public boolean contains(Object value) {
+    return isEqualValue(value) || next.contains(value);
+  }
 
-	@Override
-	public int size() {
-		return 1 + next.size();
-	}
+  @Override
+  public int size() {
+    return 1 + next.size();
+  }
 
-	@Override
-	public Iterator<T> iterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  public Iterator<T> iterator() {
+    return new Itr<T>(this);
+  }
 
-	@Override
-	public PersistentStack<T> with(T value) {
-		return new SingleLinkedList<T>(this, value);
-	}
+  @Override
+  public PersistentStack<T> push(T value) {
+    return with(value);
+  }
 
-	@Override
-	public PersistentStack<T> withAll(Iterable<? extends T> values) {
-		return (PersistentStack) super.withAll(values);
-	}
+  @Override
+  public PersistentStack<T> with(T value) {
+    return new SingleLinkedList<T>(this, value);
+  }
 
-	@Override
-	public PersistentStack<T> without(Object value) {
-		if (this.value == value
-				|| (this.value != null && this.value.equals(value))) {
-			return next;
-		} else {
-			return new SingleLinkedList<T>((SingleLinkedList) next
-					.without(value), this.value);
-		}
-	}
+  @Override
+  public PersistentStack<T> withAll(Iterable<? extends T> values) {
+    return (PersistentStack) super.withAll(values);
+  }
 
-	@Override
-	public PersistentStack<T> withoutAll(Iterable<?> values) {
-		return (PersistentStack) super.withoutAll(values);
-	}
+  @Override
+  public PersistentStack<T> without(Object value) {
+    PersistentStack<T> stack = withoutHelper(this, new ArrayList<Object>(Arrays.asList(value)));
+    if (stack == null) {
+      return this;
+    } else {
+      return stack;
+    }
+  }
 
-	@Override
-	public T peek() {
-		return value;
-	}
+  @Override
+  public PersistentStack<T> withoutAll(Iterable<?> values) {
+    PersistentStack<T> stack = withoutHelper(this, new ArrayList<Object>(PersistentCollections.container(values)));
+    if (stack == null) {
+      return this;
+    } else {
+      return stack;
+    }
+  }
 
-	@Override
-	public PersistentStack<T> pop() {
-		return next;
-	}
+  protected static <T> SingleLinkedList<T> withoutHelper(SingleLinkedList<T> pList, List<?> items) {
+    if (items.isEmpty() || pList.isEmpty()) {
+      return null;
+    } else {
+      int index = items.indexOf(pList.value);
+      if (index >= 0) {
+        items.remove(index);
+        SingleLinkedList<T> stack = withoutHelper(pList.next, items);
+        if (stack == null) {
+          return pList.next;
+        } else {
+          return stack;
+        }
+      } else {
+        SingleLinkedList<T> stack = withoutHelper(pList.next, items);
+        if (stack == null) {
+          return null;
+        } else {
+          return new SingleLinkedList<T>(stack, pList.value);
+        }
+      }
+    }
+  }
 
-	protected static final class Empty<T> extends SingleLinkedList<T> {
-		@Override
-		public boolean contains(Object value) {
-			return false;
-		}
+  @Override
+  public T peek() {
+    return value;
+  }
 
-		@Override
-		public boolean containsAll(Iterable<?> values) {
-			return false;
-		}
+  @Override
+  public PersistentStack<T> pop() {
+    return next;
+  }
 
-		@Override
-		public int size() {
-			return 0;
-		}
+  protected boolean isEqualValue(Object other) {
+    return value == other || (value != null && value.equals(other));
+  }
 
-		@Override
-		public Iterator<T> iterator() {
-			return null;
-		}
+  protected static class Itr<T> implements Iterator<T> {
+    SingleLinkedList<T> current;
 
-		@Override
-		public T peek() {
-			throw new NoSuchElementException();
-		}
+    public Itr(SingleLinkedList<T> head) {
+      current = head;
+    }
 
-		@Override
-		public PersistentStack<T> pop() {
-			return this;
-		}
+    @Override
+    public boolean hasNext() {
+      return current != EMPTY;
+    }
 
-		@Override
-		public PersistentStack<T> without(Object value) {
-			return this;
-		}
+    @Override
+    public T next() {
+      if (hasNext()) {
+        T value = current.value;
+        current = current.next;
+        return value;
+      } else {
+        throw new NoSuchElementException();
+      }
+    }
 
-		@Override
-		public PersistentStack<T> withoutAll(Iterable<?> values) {
-			return this;
-		}
-	}
+    @Override
+    public void remove() {
+      throw new UnsupportedOperationException();
+    }
+  }
+
+  protected static final class Empty<T> extends SingleLinkedList<T> {
+    @Override
+    public boolean contains(Object value) {
+      return false;
+    }
+
+    @Override
+    public boolean containsAll(Iterable<?> values) {
+      return false;
+    }
+
+    @Override
+    public int size() {
+      return 0;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+      return PersistentCollections.EMPTY_ITR;
+    }
+
+    @Override
+    public T peek() {
+      throw new NoSuchElementException();
+    }
+
+    @Override
+    public PersistentStack<T> pop() {
+      return this;
+    }
+
+    @Override
+    public PersistentStack<T> without(Object value) {
+      return this;
+    }
+
+    @Override
+    public PersistentStack<T> withoutAll(Iterable<?> values) {
+      return this;
+    }
+  }
 }

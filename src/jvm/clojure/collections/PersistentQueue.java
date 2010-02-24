@@ -9,28 +9,22 @@ package clojure.collections;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public interface PersistentList<T> extends PersistentCollection<T> {
-  T get(int index);
+public interface PersistentQueue<T> extends PersistentCollection<T> {
+  @Override
+  PersistentQueue<T> with(T value);
 
   @Override
-  PersistentList<T> with(T value);
+  PersistentQueue<T> withAll(Iterable<? extends T> values);
 
   @Override
-  PersistentList<T> withAll(Iterable<? extends T> values);
-
-  PersistentList<T> with(int index, T value);
-
-  int indexOf(Object value);
-
-  int lastIndexOf(Object value);
+  PersistentQueue<T> without(Object value);
 
   @Override
-  PersistentList<T> without(Object value);
+  PersistentQueue<T> withoutAll(Iterable<?> values);
 
-  @Override
-  PersistentList<T> withoutAll(Iterable<?> values);
+  T peek();
 
-  PersistentList<T> without(int index);
+  PersistentQueue<T> pop();
 
-  PersistentList<T> subList(int fromIndex, int toIndex);
+  PersistentQueue<T> offer(T value);
 }

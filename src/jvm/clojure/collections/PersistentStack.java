@@ -1,15 +1,21 @@
 package clojure.collections;
 
 public interface PersistentStack<T> extends PersistentCollection<T> {
-	PersistentStack<T> with(T value);
+  @Override
+  PersistentStack<T> with(T value);
 
-	PersistentStack<T> withAll(Iterable<? extends T> values);
+  @Override
+  PersistentStack<T> withAll(Iterable<? extends T> values);
 
-	PersistentStack<T> without(Object value);
+  @Override
+  PersistentStack<T> without(Object value);
 
-	PersistentStack<T> withoutAll(Iterable<?> values);
+  @Override
+  PersistentStack<T> withoutAll(Iterable<?> values);
 
-	T peek();
+  T peek();
 
-	PersistentStack<T> pop();
+  PersistentStack<T> pop();
+
+  PersistentStack<T> push(T value);
 }
