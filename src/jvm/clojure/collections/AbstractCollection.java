@@ -45,4 +45,21 @@ public abstract class AbstractCollection<T> implements PersistentCollection<T> {
   public boolean isEmpty() {
     return size() == 0;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder("[");
+    boolean first = true;
+    for (T value : this) {
+      if (first) {
+        first = false;
+      } else {
+        builder.append(", ");
+      }
+
+      builder.append(value);
+    }
+
+    return builder.toString();
+  }
 }

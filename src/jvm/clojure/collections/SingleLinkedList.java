@@ -1,9 +1,6 @@
 package clojure.collections;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -22,6 +19,8 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
 
   protected final SingleLinkedList<T> next;
 
+  protected final int size;
+
   public static <T> SingleLinkedList<T> empty() {
     return EMPTY;
   }
@@ -29,6 +28,7 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
   protected SingleLinkedList(SingleLinkedList<T> next, T value) {
     this.next = next;
     this.value = value;
+    this.size = next.size() + 1;
   }
 
   protected SingleLinkedList() {
@@ -42,7 +42,7 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
 
   @Override
   public int size() {
-    return 1 + next.size();
+    return size;
   }
 
   @Override
@@ -52,22 +52,22 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
 
   @Override
   public PersistentStack<T> push(T value) {
-    return with(value);
-  }
-
-  @Override
-  public PersistentStack<T> with(T value) {
     return new SingleLinkedList<T>(this, value);
   }
 
   @Override
+  public PersistentStack<T> with(T value) {
+    return push(value);
+  }
+
+  @Override
   public PersistentStack<T> withAll(Iterable<? extends T> values) {
-    return (PersistentStack) super.withAll(values);
+    return (PersistentStack<T>) super.withAll(values);
   }
 
   @Override
   public PersistentStack<T> without(Object value) {
-    PersistentStack<T> stack = withoutHelper(this, new ArrayList<Object>(Arrays.asList(value)));
+    PersistentStack<T> stack = PersistentCollections.withoutHelper(this, PersistentCollections.asList(value));
     if (stack == null) {
       return this;
     } else {
@@ -77,35 +77,11 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
 
   @Override
   public PersistentStack<T> withoutAll(Iterable<?> values) {
-    PersistentStack<T> stack = withoutHelper(this, new ArrayList<Object>(PersistentCollections.container(values)));
+    PersistentStack<T> stack = PersistentCollections.withoutHelper(this, PersistentCollections.asList(values));
     if (stack == null) {
       return this;
     } else {
       return stack;
-    }
-  }
-
-  protected static <T> SingleLinkedList<T> withoutHelper(SingleLinkedList<T> pList, List<?> items) {
-    if (items.isEmpty() || pList.isEmpty()) {
-      return null;
-    } else {
-      int index = items.indexOf(pList.value);
-      if (index >= 0) {
-        items.remove(index);
-        SingleLinkedList<T> stack = withoutHelper(pList.next, items);
-        if (stack == null) {
-          return pList.next;
-        } else {
-          return stack;
-        }
-      } else {
-        SingleLinkedList<T> stack = withoutHelper(pList.next, items);
-        if (stack == null) {
-          return null;
-        } else {
-          return new SingleLinkedList<T>(stack, pList.value);
-        }
-      }
     }
   }
 
@@ -117,6 +93,22 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
   @Override
   public PersistentStack<T> pop() {
     return next;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    } else if (obj instanceof PersistentStack<?>) {
+      return PersistentCollections.orderAwareEquals(this, (PersistentStack<?>) obj);
+    } else {
+      return false;
+    }
+  }
+
+  @Override
+  public int hashCode() {
+    return PersistentCollections.orderAwareHashCode(this);
   }
 
   protected boolean isEqualValue(Object other) {

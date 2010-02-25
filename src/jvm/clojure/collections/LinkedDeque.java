@@ -1,6 +1,7 @@
 package clojure.collections;
 
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
@@ -12,84 +13,163 @@ import java.util.Iterator;
  * software.
  */
 public class LinkedDeque<T> extends AbstractCollection<T> implements PersistentDeque<T> {
-  protected PersistentStack<T> front;
+  private static final LinkedDeque EMPTY = new LinkedDeque(SingleLinkedList.empty(), SingleLinkedList.empty());
 
-  protected PersistentStack<T> rear;
+  protected final PersistentStack<T> front;
+
+  protected final PersistentStack<T> rear;
+
+  public static <T> LinkedDeque<T> empty() {
+    return EMPTY;
+  }
+
+  protected LinkedDeque(PersistentStack<T> front, PersistentStack<T> rear) {
+    this.front = front;
+    this.rear = rear;
+  }
 
   @Override
   public T peek() {
-    // TODO Auto-generated method stub
-    return null;
+    return front.peek();
   }
 
   @Override
   public boolean contains(Object value) {
-    // TODO Auto-generated method stub
-    return false;
+    return front.contains(value) || rear.contains(value);
   }
 
   @Override
   public int size() {
-    // TODO Auto-generated method stub
-    return 0;
+    return front.size() + rear.size();
   }
 
   @Override
   public Iterator<T> iterator() {
-    // TODO Auto-generated method stub
-    return null;
+    return new Itr();
   }
 
   @Override
   public PersistentDeque<T> with(T value) {
-    // TODO Auto-generated method stub
-    return null;
+    return offer(value);
   }
 
   @Override
   public PersistentDeque<T> withAll(Iterable<? extends T> values) {
-    return (PersistentDeque) super.withAll(values);
+    return (PersistentDeque<T>) super.withAll(values);
   }
 
   @Override
   public PersistentDeque<T> without(Object value) {
-    // TODO Auto-generated method stub
-    return null;
+    return without(PersistentCollections.asList(value));
   }
 
   @Override
   public PersistentDeque<T> withoutAll(Iterable<?> values) {
-    return (PersistentDeque) super.withoutAll(values);
+    return without(PersistentCollections.asList(values));
+  }
+
+  protected PersistentDeque<T> without(List<?> list) {
+    PersistentStack<T> newFront = PersistentCollections.withoutHelper(front, list);
+    if (newFront == null) {
+      newFront = front;
+    }
+
+    PersistentStack<T> newRear = PersistentCollections.withoutHelper(rear, list);
+    if (newRear == null) {
+      newRear = rear;
+    }
+
+    if (newFront.isEmpty()) {
+      newFront = PersistentCollections.reverse(newRear);
+      newRear = SingleLinkedList.empty();
+    }
+
+    return new LinkedDeque<T>(newFront, newRear);
   }
 
   @Override
   public PersistentDeque<T> pop() {
-    // TODO Auto-generated method stub
-    return null;
+    PersistentStack<T> newFront = front.pop();
+    PersistentStack<T> newRear = rear;
+    if (newFront.isEmpty()) {
+      newFront = PersistentCollections.reverse(rear);
+      newRear = SingleLinkedList.empty();
+    }
+
+    return new LinkedDeque<T>(newFront, newRear);
   }
 
   @Override
   public PersistentDeque<T> push(T value) {
-    // TODO Auto-generated method stub
-    return null;
+    return new LinkedDeque<T>(front.push(value), rear);
   }
 
   @Override
   public PersistentDeque<T> offer(T value) {
-    // TODO Auto-generated method stub
-    return null;
+    if (front.isEmpty()) {
+      return new LinkedDeque<T>(front.push(value), rear);
+    } else {
+      return new LinkedDeque<T>(front, rear.push(value));
+    }
   }
 
   @Override
   public T first() {
-    // TODO Auto-generated method stub
-    return null;
+    return front.peek();
   }
 
   @Override
   public T last() {
-    // TODO Auto-generated method stub
-    return null;
+    if (rear.isEmpty()) {
+      T value = null;
+      for (T v : front) {
+        value = v;
+      }
+
+      return value;
+    } else {
+      return rear.peek();
+    }
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    } else if (obj instanceof PersistentQueue<?> || obj instanceof PersistentStack<?>) {
+      return PersistentCollections.orderAwareEquals(this, (PersistentCollection<?>) obj);
+    } else {
+      return false;
+    }
+  }
+
+  @Override
+  public int hashCode() {
+    return PersistentCollections.orderAwareHashCode(this);
+  }
+
+  protected class Itr implements Iterator<T> {
+    Iterator<T> firstItr = LinkedDeque.this.front.iterator();
+
+    Iterator<T> secondItr = PersistentCollections.reverse(LinkedDeque.this.rear).iterator();
+
+    @Override
+    public boolean hasNext() {
+      return firstItr.hasNext() || secondItr.hasNext();
+    }
+
+    @Override
+    public T next() {
+      if (firstItr.hasNext()) {
+        return firstItr.next();
+      } else {
+        return secondItr.next();
+      }
+    }
+
+    @Override
+    public void remove() {
+      throw new UnsupportedOperationException();
+    }
+  }
 }

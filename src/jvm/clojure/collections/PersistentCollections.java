@@ -1,9 +1,9 @@
 package clojure.collections;
 
-import java.util.AbstractSet;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
@@ -32,57 +32,89 @@ public class PersistentCollections {
     }
   };
 
-  static <E> Set<E> container(final Iterable<E> iterable) {
-    return new AbstractSet<E>() {
-      @Override
-      public Iterator<E> iterator() {
-        return iterable.iterator();
-      }
+  static <E> List<E> asList(Iterable<E> iterable) {
+    List<E> list = new ArrayList<E>();
+    for (E value : iterable) {
+      list.add(value);
+    }
 
-      @Override
-      public int size() {
-        int count = 0;
-        for (Iterator<E> itr = iterator(); itr.hasNext(); itr.next()) {
-          count++;
-        }
-        return count;
-      }
-    };
+    return list;
   }
 
-  static <E> Set<E> container(final E value) {
-    return new AbstractSet<E>() {
-      @Override
-      public Iterator<E> iterator() {
-        return new Iterator<E>() {
-          boolean first = true;
+  static <E> List<E> asList(final E value) {
+    List<E> list = new ArrayList<E>(1);
+    list.add(value);
+    return list;
+  }
 
-          @Override
-          public boolean hasNext() {
-            return first;
-          }
+  public static <E> PersistentStack<E> reverse(PersistentStack<E> stack) {
+    PersistentStack<E> newStack = SingleLinkedList.empty();
+    for (E value : stack) {
+      newStack = newStack.push(value);
+    }
 
-          @Override
-          public E next() {
-            if (first) {
-              first = false;
-              return value;
-            } else {
-              throw new NoSuchElementException();
-            }
-          }
+    return newStack;
+  }
 
-          @Override
-          public void remove() {
-            throw new UnsupportedOperationException();
-          }
-        };
+  static <T> PersistentStack<T> withoutHelper(PersistentStack<T> pList, List<?> items) {
+    if (items.isEmpty() || pList.isEmpty()) {
+      return null;
+    } else {
+      int index = items.indexOf(pList.peek());
+      if (index >= 0) {
+        items.remove(index);
+        PersistentStack<T> stack = withoutHelper(pList.pop(), items);
+        if (stack == null) {
+          return pList.pop();
+        } else {
+          return stack;
+        }
+      } else {
+        PersistentStack<T> stack = withoutHelper(pList.pop(), items);
+        if (stack == null) {
+          return null;
+        } else {
+          return stack.push(pList.peek());
+        }
+      }
+    }
+  }
+
+  static boolean orderAwareEquals(PersistentCollection<?> a, PersistentCollection<?> b) {
+    if (a.size() == b.size()) {
+      Iterator<?> aItr = a.iterator();
+      Iterator<?> bItr = b.iterator();
+      while (aItr.hasNext()) {
+        if (!aItr.next().equals(bItr.next())) {
+          return false;
+        }
       }
 
-      @Override
-      public int size() {
-        return 1;
-      }
-    };
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static boolean equals(PersistentCollection<?> a, PersistentCollection<?> b) {
+    return false;
+  }
+
+  static int orderAwareHashCode(PersistentCollection<?> collection) {
+    int hash = 7;
+    for (Object value : collection) {
+      hash = 31 * hash + (value == null ? 0 : value.hashCode());
+    }
+
+    return hash;
+  }
+
+  static int hashCode(PersistentCollection<?> collection) {
+    int hash = 3;
+    for (Object value : collection) {
+      hash += (value == null ? 0 : value.hashCode());
+    }
+
+    return hash;
   }
 }
