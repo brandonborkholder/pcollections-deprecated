@@ -96,8 +96,18 @@ public class PersistentCollections {
     }
   }
 
-  static boolean equals(PersistentCollection<?> a, PersistentCollection<?> b) {
-    return false;
+  static boolean equals(PersistentSet<?> a, PersistentSet<?> b) {
+    if (a.size() == b.size()) {
+      for (Object value : a) {
+        if (!b.contains(value)) {
+          return false;
+        }
+      }
+
+      return true;
+    } else {
+      return false;
+    }
   }
 
   static int orderAwareHashCode(PersistentCollection<?> collection) {
@@ -109,7 +119,7 @@ public class PersistentCollections {
     return hash;
   }
 
-  static int hashCode(PersistentCollection<?> collection) {
+  static int hashCode(PersistentSet<?> collection) {
     int hash = 3;
     for (Object value : collection) {
       hash += (value == null ? 0 : value.hashCode());

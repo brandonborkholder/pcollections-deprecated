@@ -12,18 +12,18 @@ import java.util.List;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public class LinkedDeque<T> extends AbstractCollection<T> implements PersistentDeque<T> {
-  private static final LinkedDeque EMPTY = new LinkedDeque(SingleLinkedList.empty(), SingleLinkedList.empty());
+public class LinkedQueue<T> extends AbstractCollection<T> implements PersistentQueue<T> {
+  private static final LinkedQueue EMPTY = new LinkedQueue(SingleLinkedList.empty(), SingleLinkedList.empty());
 
   protected final PersistentStack<T> front;
 
   protected final PersistentStack<T> rear;
 
-  public static <T> LinkedDeque<T> empty() {
+  public static <T> LinkedQueue<T> empty() {
     return EMPTY;
   }
 
-  protected LinkedDeque(PersistentStack<T> front, PersistentStack<T> rear) {
+  protected LinkedQueue(PersistentStack<T> front, PersistentStack<T> rear) {
     this.front = front;
     this.rear = rear;
   }
@@ -49,26 +49,26 @@ public class LinkedDeque<T> extends AbstractCollection<T> implements PersistentD
   }
 
   @Override
-  public PersistentDeque<T> with(T value) {
+  public PersistentQueue<T> with(T value) {
     return offer(value);
   }
 
   @Override
-  public PersistentDeque<T> withAll(Iterable<? extends T> values) {
-    return (PersistentDeque<T>) super.withAll(values);
+  public PersistentQueue<T> withAll(Iterable<? extends T> values) {
+    return (PersistentQueue<T>) super.withAll(values);
   }
 
   @Override
-  public PersistentDeque<T> without(Object value) {
+  public PersistentQueue<T> without(Object value) {
     return without(PersistentCollections.asList(value));
   }
 
   @Override
-  public PersistentDeque<T> withoutAll(Iterable<?> values) {
+  public PersistentQueue<T> withoutAll(Iterable<?> values) {
     return without(PersistentCollections.asList(values));
   }
 
-  protected PersistentDeque<T> without(List<?> list) {
+  protected PersistentQueue<T> without(List<?> list) {
     PersistentStack<T> newFront = PersistentCollections.withoutHelper(front, list);
     if (newFront == null) {
       newFront = front;
@@ -84,11 +84,11 @@ public class LinkedDeque<T> extends AbstractCollection<T> implements PersistentD
       newRear = SingleLinkedList.empty();
     }
 
-    return new LinkedDeque<T>(newFront, newRear);
+    return new LinkedQueue<T>(newFront, newRear);
   }
 
   @Override
-  public PersistentDeque<T> pop() {
+  public PersistentQueue<T> pop() {
     PersistentStack<T> newFront = front.pop();
     PersistentStack<T> newRear = rear;
     if (newFront.isEmpty()) {
@@ -96,39 +96,15 @@ public class LinkedDeque<T> extends AbstractCollection<T> implements PersistentD
       newRear = SingleLinkedList.empty();
     }
 
-    return new LinkedDeque<T>(newFront, newRear);
+    return new LinkedQueue<T>(newFront, newRear);
   }
 
   @Override
-  public PersistentDeque<T> push(T value) {
-    return new LinkedDeque<T>(front.push(value), rear);
-  }
-
-  @Override
-  public PersistentDeque<T> offer(T value) {
+  public PersistentQueue<T> offer(T value) {
     if (front.isEmpty()) {
-      return new LinkedDeque<T>(front.push(value), rear);
+      return new LinkedQueue<T>(front.push(value), rear);
     } else {
-      return new LinkedDeque<T>(front, rear.push(value));
-    }
-  }
-
-  @Override
-  public T first() {
-    return front.peek();
-  }
-
-  @Override
-  public T last() {
-    if (rear.isEmpty()) {
-      T value = null;
-      for (T v : front) {
-        value = v;
-      }
-
-      return value;
-    } else {
-      return rear.peek();
+      return new LinkedQueue<T>(front, rear.push(value));
     }
   }
 
@@ -136,7 +112,7 @@ public class LinkedDeque<T> extends AbstractCollection<T> implements PersistentD
   public boolean equals(Object obj) {
     if (this == obj) {
       return true;
-    } else if (obj instanceof PersistentQueue<?> || obj instanceof PersistentStack<?>) {
+    } else if (obj instanceof PersistentQueue<?>) {
       return PersistentCollections.orderAwareEquals(this, (PersistentCollection<?>) obj);
     } else {
       return false;
@@ -149,9 +125,9 @@ public class LinkedDeque<T> extends AbstractCollection<T> implements PersistentD
   }
 
   protected class Itr implements Iterator<T> {
-    Iterator<T> firstItr = LinkedDeque.this.front.iterator();
+    Iterator<T> firstItr = LinkedQueue.this.front.iterator();
 
-    Iterator<T> secondItr = PersistentCollections.reverse(LinkedDeque.this.rear).iterator();
+    Iterator<T> secondItr = PersistentCollections.reverse(LinkedQueue.this.rear).iterator();
 
     @Override
     public boolean hasNext() {
