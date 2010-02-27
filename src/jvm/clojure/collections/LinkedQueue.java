@@ -120,7 +120,7 @@ public class LinkedQueue<T> extends AbstractCollection<T> implements PersistentQ
   }
 
   @Override
-  public int hashCode() {
+  protected int hash() {
     return PersistentCollections.orderAwareHashCode(this);
   }
 

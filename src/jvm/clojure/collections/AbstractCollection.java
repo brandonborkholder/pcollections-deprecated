@@ -10,6 +10,8 @@ package clojure.collections;
  * software.
  */
 public abstract class AbstractCollection<T> implements PersistentCollection<T> {
+  protected int hashCode = -1;
+
   @Override
   public PersistentCollection<T> withAll(Iterable<? extends T> values) {
     PersistentCollection<T> collection = this;
@@ -62,4 +64,15 @@ public abstract class AbstractCollection<T> implements PersistentCollection<T> {
 
     return builder.toString();
   }
+
+  @Override
+  public int hashCode() {
+    if (hashCode == -1) {
+      hashCode = hash();
+    }
+
+    return hashCode;
+  }
+
+  protected abstract int hash();
 }

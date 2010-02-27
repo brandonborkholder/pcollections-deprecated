@@ -18,7 +18,7 @@ public interface PersistentMap<K, V> extends Iterable<Entry<K, V>> {
 
   PersistentMap<K, V> without(Object key);
 
-  PersistentMap<K, V> withoutAll(Iterable<? extends Entry<? extends K, ? extends V>> iterable);
+  PersistentMap<K, V> withoutAll(Iterable<?> iterable);
 
   PersistentSet<K> keySet();
 

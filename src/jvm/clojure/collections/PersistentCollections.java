@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Map.Entry;
 
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
@@ -78,6 +80,33 @@ public class PersistentCollections {
         }
       }
     }
+  }
+
+  static <T> Iterable<Entry<T, T>> expandIterable(final Iterable<T> iterable) {
+    return new Iterable<Entry<T, T>>() {
+      @Override
+      public Iterator<Entry<T, T>> iterator() {
+        return new Iterator<Entry<T, T>>() {
+          Iterator<T> itr = iterable.iterator();
+
+          @Override
+          public boolean hasNext() {
+            return itr.hasNext();
+          }
+
+          @Override
+          public Entry<T, T> next() {
+            T value = itr.next();
+            return new SimpleImmutableEntry<T, T>(value, value);
+          }
+
+          @Override
+          public void remove() {
+            throw new UnsupportedOperationException();
+          }
+        };
+      }
+    };
   }
 
   static boolean orderAwareEquals(PersistentCollection<?> a, PersistentCollection<?> b) {

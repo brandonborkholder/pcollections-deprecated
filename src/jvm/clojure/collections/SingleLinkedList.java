@@ -107,7 +107,7 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
   }
 
   @Override
-  public int hashCode() {
+  protected int hash() {
     return PersistentCollections.orderAwareHashCode(this);
   }
 
