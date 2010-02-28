@@ -1,6 +1,7 @@
 package clojure.collections;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -31,6 +32,13 @@ public class PersistentCollections {
     @Override
     public void remove() {
       throw new UnsupportedOperationException();
+    }
+  };
+
+  static final Comparator DEFAULT_COMPARATOR = new Comparator<Comparable>() {
+    @Override
+    public int compare(Comparable o1, Comparable o2) {
+      return o1.compareTo(o2);
     }
   };
 
@@ -155,5 +163,9 @@ public class PersistentCollections {
     }
 
     return hash;
+  }
+
+  static boolean areEqual(Object o1, Object o2) {
+    return o1 == o2 || (o1 != null && o1.equals(o2));
   }
 }

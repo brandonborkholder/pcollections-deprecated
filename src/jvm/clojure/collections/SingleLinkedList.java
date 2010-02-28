@@ -112,7 +112,7 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
   }
 
   protected boolean isEqualValue(Object other) {
-    return value == other || (value != null && value.equals(other));
+    return PersistentCollections.areEqual(value, other);
   }
 
   protected static class Itr<T> implements Iterator<T> {
