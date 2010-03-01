@@ -39,17 +39,6 @@ public abstract class ClojureMap<K, V> extends AbstractMap<K, V> {
   }
 
   @Override
-  public PersistentSet<K> keySet() {
-    return new BaseSet<K>(this);
-  }
-
-  @Override
-  public PersistentCollection<V> values() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
   public V get(K key) {
     return (V) map.valAt(key);
   }

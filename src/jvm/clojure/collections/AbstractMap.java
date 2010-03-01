@@ -40,6 +40,16 @@ public abstract class AbstractMap<K, V> implements PersistentMap<K, V> {
   }
 
   @Override
+  public PersistentSet<K> keySet() {
+    return new BaseSet<K>(this);
+  }
+
+  @Override
+  public PersistentCollection<V> values() {
+    return new ValueCollection<V>(this);
+  }
+
+  @Override
   public int hashCode() {
     if (hashCode == -1) {
       hashCode = hash();

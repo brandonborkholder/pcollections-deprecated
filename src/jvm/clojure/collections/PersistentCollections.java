@@ -133,7 +133,10 @@ public class PersistentCollections {
     }
   }
 
-  static boolean equals(PersistentSet<?> a, PersistentSet<?> b) {
+  /*
+   * TODO This doesn't account for the number of times a value occurs.
+   */
+  static boolean equals(PersistentCollection<?> a, PersistentCollection<?> b) {
     if (a.size() == b.size()) {
       for (Object value : a) {
         if (!b.contains(value)) {
@@ -156,7 +159,7 @@ public class PersistentCollections {
     return hash;
   }
 
-  static int hashCode(PersistentSet<?> collection) {
+  static int hashCode(PersistentCollection<?> collection) {
     int hash = 3;
     for (Object value : collection) {
       hash += (value == null ? 0 : value.hashCode());

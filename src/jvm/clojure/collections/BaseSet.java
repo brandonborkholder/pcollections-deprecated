@@ -79,7 +79,7 @@ public class BaseSet<T> extends AbstractCollection<T> implements PersistentSet<T
     }
   }
 
-  protected class KeyItr implements Iterator<T> {
+  protected class KeyItr extends ImmutableItr<T> {
     private final Iterator<? extends Entry<T, ?>> itr = map.iterator();
 
     @Override
@@ -90,11 +90,6 @@ public class BaseSet<T> extends AbstractCollection<T> implements PersistentSet<T
     @Override
     public T next() {
       return itr.next().getKey();
-    }
-
-    @Override
-    public void remove() {
-      throw new UnsupportedOperationException();
     }
   }
 }

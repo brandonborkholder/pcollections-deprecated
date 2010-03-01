@@ -115,7 +115,7 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
     return PersistentCollections.areEqual(value, other);
   }
 
-  protected static class Itr<T> implements Iterator<T> {
+  protected static class Itr<T> extends ImmutableItr<T> {
     SingleLinkedList<T> current;
 
     public Itr(SingleLinkedList<T> head) {
@@ -136,11 +136,6 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
       } else {
         throw new NoSuchElementException();
       }
-    }
-
-    @Override
-    public void remove() {
-      throw new UnsupportedOperationException();
     }
   }
 

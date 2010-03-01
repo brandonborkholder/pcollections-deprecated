@@ -124,7 +124,7 @@ public class LinkedQueue<T> extends AbstractCollection<T> implements PersistentQ
     return PersistentCollections.orderAwareHashCode(this);
   }
 
-  protected class Itr implements Iterator<T> {
+  protected class Itr extends ImmutableItr<T> {
     Iterator<T> firstItr = LinkedQueue.this.front.iterator();
 
     Iterator<T> secondItr = PersistentCollections.reverse(LinkedQueue.this.rear).iterator();
@@ -141,11 +141,6 @@ public class LinkedQueue<T> extends AbstractCollection<T> implements PersistentQ
       } else {
         return secondItr.next();
       }
-    }
-
-    @Override
-    public void remove() {
-      throw new UnsupportedOperationException();
     }
   }
 }
