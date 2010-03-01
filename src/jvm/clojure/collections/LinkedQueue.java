@@ -1,7 +1,7 @@
 package clojure.collections;
 
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
@@ -60,31 +60,30 @@ public class LinkedQueue<T> extends AbstractCollection<T> implements PersistentQ
 
   @Override
   public PersistentQueue<T> without(Object value) {
-    return without(PersistentCollections.asList(value));
+    PersistentStack<T> newFront = PersistentCollections.withoutHelper(front, value);
+    if (newFront == null) {
+      PersistentStack<T> newRear = PersistentCollections.withoutHelper(rear, value);
+      if (newRear == null) {
+        return this;
+      } else {
+        return new LinkedQueue<T>(front, newRear);
+      }
+    } else {
+      return new LinkedQueue<T>(newFront, rear);
+    }
   }
 
   @Override
   public PersistentQueue<T> withoutAll(Iterable<?> values) {
-    return without(PersistentCollections.asList(values));
-  }
+    Collection<?> collection = PersistentCollections.toSet(values);
+    PersistentStack<T> newFront = PersistentCollections.withoutHelper(front, collection);
+    PersistentStack<T> newRear = PersistentCollections.withoutHelper(rear, collection);
 
-  protected PersistentQueue<T> without(List<?> list) {
-    PersistentStack<T> newFront = PersistentCollections.withoutHelper(front, list);
-    if (newFront == null) {
-      newFront = front;
+    if (newFront == null && newRear == null) {
+      return this;
+    } else {
+      return new LinkedQueue<T>(newFront == null ? front : newFront, newRear == null ? rear : newRear);
     }
-
-    PersistentStack<T> newRear = PersistentCollections.withoutHelper(rear, list);
-    if (newRear == null) {
-      newRear = rear;
-    }
-
-    if (newFront.isEmpty()) {
-      newFront = PersistentCollections.reverse(newRear);
-      newRear = SingleLinkedList.empty();
-    }
-
-    return new LinkedQueue<T>(newFront, newRear);
   }
 
   @Override

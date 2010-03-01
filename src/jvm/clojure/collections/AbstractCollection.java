@@ -23,16 +23,6 @@ public abstract class AbstractCollection<T> implements PersistentCollection<T> {
   }
 
   @Override
-  public PersistentCollection<T> withoutAll(Iterable<?> values) {
-    PersistentCollection<T> collection = this;
-    for (Object value : values) {
-      collection = collection.without(value);
-    }
-
-    return collection;
-  }
-
-  @Override
   public boolean containsAll(Iterable<?> values) {
     for (Object value : values) {
       if (!contains(value)) {

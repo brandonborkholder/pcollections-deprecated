@@ -1,7 +1,6 @@
 package clojure.collections;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -45,7 +44,7 @@ public class ValueCollection<T> extends AbstractCollection<T> {
 
   @Override
   public PersistentCollection<T> without(Object value) {
-    PersistentStack<T> stack = PersistentCollections.withoutHelper(appended, PersistentCollections.asList(value));
+    PersistentStack<T> stack = PersistentCollections.withoutHelper(appended, value);
     if (stack == null) {
       Iterator<? extends Entry<?, T>> itr = map.iterator();
       while (itr.hasNext()) {
@@ -63,12 +62,7 @@ public class ValueCollection<T> extends AbstractCollection<T> {
 
   @Override
   public PersistentCollection<T> withoutAll(Iterable<?> values) {
-    Collection<Object> collection = new HashSet<Object>(PersistentCollections.asList(values));
-    PersistentStack<T> stack = PersistentCollections.withoutHelper(appended, PersistentCollections.asList(values));
-    if (stack == null) {
-      stack = appended;
-    }
-
+    Collection<?> collection = PersistentCollections.toSet(values);
     PersistentMap<?, T> newMap = map;
     Iterator<? extends Entry<?, T>> itr = map.iterator();
     while (itr.hasNext()) {
@@ -78,7 +72,7 @@ public class ValueCollection<T> extends AbstractCollection<T> {
       }
     }
 
-    return new ValueCollection<T>(newMap, stack);
+    return new ValueCollection<T>(newMap, appended.withoutAll(values));
   }
 
   @Override

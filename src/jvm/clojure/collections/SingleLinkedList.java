@@ -67,7 +67,7 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
 
   @Override
   public PersistentStack<T> without(Object value) {
-    PersistentStack<T> stack = PersistentCollections.withoutHelper(this, PersistentCollections.asList(value));
+    PersistentStack<T> stack = PersistentCollections.withoutHelper(this, value);
     if (stack == null) {
       return this;
     } else {
@@ -77,7 +77,7 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
 
   @Override
   public PersistentStack<T> withoutAll(Iterable<?> values) {
-    PersistentStack<T> stack = PersistentCollections.withoutHelper(this, PersistentCollections.asList(values));
+    PersistentStack<T> stack = PersistentCollections.withoutHelper(this, PersistentCollections.toSet(values));
     if (stack == null) {
       return this;
     } else {

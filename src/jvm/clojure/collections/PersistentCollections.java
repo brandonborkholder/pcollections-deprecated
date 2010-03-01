@@ -1,10 +1,11 @@
 package clojure.collections;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Map.Entry;
 
@@ -42,19 +43,13 @@ public class PersistentCollections {
     }
   };
 
-  static <E> List<E> asList(Iterable<E> iterable) {
-    List<E> list = new ArrayList<E>();
+  static <E> Set<E> toSet(Iterable<E> iterable) {
+    Set<E> set = new HashSet<E>();
     for (E value : iterable) {
-      list.add(value);
+      set.add(value);
     }
 
-    return list;
-  }
-
-  static <E> List<E> asList(final E value) {
-    List<E> list = new ArrayList<E>(1);
-    list.add(value);
-    return list;
+    return set;
   }
 
   public static <E> PersistentStack<E> reverse(PersistentStack<E> stack) {
@@ -66,26 +61,33 @@ public class PersistentCollections {
     return newStack;
   }
 
-  static <T> PersistentStack<T> withoutHelper(PersistentStack<T> pList, List<?> items) {
-    if (items.isEmpty() || pList.isEmpty()) {
+  static <T> PersistentStack<T> withoutHelper(PersistentStack<T> pList, Object item) {
+    if (pList.isEmpty()) {
       return null;
     } else {
-      int index = items.indexOf(pList.peek());
-      if (index >= 0) {
-        items.remove(index);
-        PersistentStack<T> stack = withoutHelper(pList.pop(), items);
-        if (stack == null) {
-          return pList.pop();
-        } else {
-          return stack;
-        }
+      if (areEqual(item, pList.peek())) {
+        return pList.pop();
       } else {
-        PersistentStack<T> stack = withoutHelper(pList.pop(), items);
+        return withoutHelper(pList.pop(), item);
+      }
+    }
+  }
+
+  static <T> PersistentStack<T> withoutHelper(PersistentStack<T> pList, Collection<?> items) {
+    if (pList.isEmpty() || items.isEmpty()) {
+      return null;
+    } else {
+      PersistentStack<T> stack = withoutHelper(pList.pop(), items);
+      if (items.contains(pList.peek())) {
         if (stack == null) {
-          return null;
-        } else {
-          return stack.push(pList.peek());
+          stack = pList.pop();
         }
+
+        return stack;
+      } else if (stack == null) {
+        return null;
+      } else {
+        return stack.push(pList.peek());
       }
     }
   }
