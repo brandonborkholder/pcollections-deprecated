@@ -25,14 +25,16 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
     return EMPTY;
   }
 
+  protected SingleLinkedList() {
+    this.next = null;
+    this.value = null;
+    this.size = 0;
+  }
+
   protected SingleLinkedList(SingleLinkedList<T> next, T value) {
     this.next = next;
     this.value = value;
     this.size = next.size() + 1;
-  }
-
-  protected SingleLinkedList() {
-    this(null, null);
   }
 
   @Override
