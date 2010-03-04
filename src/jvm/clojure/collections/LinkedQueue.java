@@ -79,11 +79,18 @@ public class LinkedQueue<T> extends AbstractCollection<T> implements PersistentQ
     PersistentStack<T> newFront = PersistentCollections.withoutHelper(front, collection);
     PersistentStack<T> newRear = PersistentCollections.withoutHelper(rear, collection);
 
-    if (newFront == null && newRear == null) {
-      return this;
-    } else {
-      return new LinkedQueue<T>(newFront == null ? front : newFront, newRear == null ? rear : newRear);
+    if (newRear == null) {
+      newRear = rear;
     }
+
+    if (newFront == null) {
+      newFront = front;
+    } else if (newFront.isEmpty()) {
+      newFront = PersistentCollections.reverse(newRear);
+      newRear = SingleLinkedList.empty();
+    }
+
+    return new LinkedQueue<T>(newFront, newRear);
   }
 
   @Override

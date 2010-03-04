@@ -15,14 +15,14 @@ import clojure.lang.PersistentTreeMap;
  * software.
  */
 public class TreeMap<K, V> extends ClojureMap<K, V> {
-  private static final TreeMap EMPTY = new TreeMap(PersistentTreeMap.EMPTY);
+  static final TreeMap EMPTY = new TreeMap(PersistentTreeMap.EMPTY);
 
   public static <K, V> TreeMap<K, V> empty(Comparator<K> comparator) {
     return new TreeMap<K, V>(new PersistentTreeMap(null, comparator));
   }
 
   public static <K extends Comparable<K>, V> TreeMap<K, V> empty() {
-    return new TreeMap<K, V>(PersistentTreeMap.EMPTY);
+    return EMPTY;
   }
 
   protected TreeMap(IPersistentMap map) {

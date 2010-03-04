@@ -52,7 +52,7 @@ public abstract class AbstractCollection<T> implements PersistentCollection<T> {
       builder.append(value);
     }
 
-    return builder.toString();
+    return builder.append("]").toString();
   }
 
   @Override

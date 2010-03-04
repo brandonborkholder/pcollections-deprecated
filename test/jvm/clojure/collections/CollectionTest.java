@@ -7,18 +7,15 @@ import java.util.HashSet;
 
 import org.junit.Test;
 
-public abstract class CollectionTest<T> extends AbstractTest<T> {
-
+public abstract class CollectionTest<T, C extends PersistentCollection<T>> extends AbstractTest<T, C> {
   @Test
   public void singleWithTest() {
-    start();
     add(random());
     assertEquivalent();
   }
 
   @Test
   public void withWithoutTest() {
-    start();
     T value = random();
     add(value);
     remove(value);
@@ -27,7 +24,6 @@ public abstract class CollectionTest<T> extends AbstractTest<T> {
 
   @Test
   public void removeEmptyTest() {
-    start();
     T value = random();
     remove(value);
     assertEquivalent();
@@ -35,7 +31,6 @@ public abstract class CollectionTest<T> extends AbstractTest<T> {
 
   @Test
   public void addManyTest() {
-    start();
     for (int i = 0; i < 5; i++) {
       add(random());
     }
@@ -45,7 +40,6 @@ public abstract class CollectionTest<T> extends AbstractTest<T> {
 
   @Test
   public void addAllTest() {
-    start();
     Collection<T> added = new HashSet<T>();
     for (int i = 0; i < 10; i++) {
       added.add(random());
@@ -57,7 +51,6 @@ public abstract class CollectionTest<T> extends AbstractTest<T> {
 
   @Test
   public void removeSomeTest() {
-    start();
     Collection<T> added = new HashSet<T>();
     for (int i = 0; i < 10; i++) {
       T value = random();
@@ -75,7 +68,6 @@ public abstract class CollectionTest<T> extends AbstractTest<T> {
 
   @Test
   public void removeAllTest() {
-    start();
     Collection<T> added = new HashSet<T>();
     for (int i = 0; i < 10; i++) {
       T value = random();
@@ -88,12 +80,10 @@ public abstract class CollectionTest<T> extends AbstractTest<T> {
   }
 
   @Override
-  protected void assertEquivalent(PersistentCollection<T> pCollection) {
+  protected void assertEquivalent(C pCollection) {
     assertEquals(getCollection().size(), pCollection.size());
     for (T value : getCollection()) {
       assertTrue(pCollection.contains(value));
     }
-
-    assertEquivalent(pCollection);
   }
 }
