@@ -4,10 +4,17 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Map.Entry;
+
+import clojure.collections.adapt.CollectionAdapter;
+import clojure.collections.adapt.ListAdapter;
+import clojure.collections.adapt.MapAdapter;
+import clojure.collections.adapt.SetAdapter;
 
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
@@ -172,5 +179,21 @@ public class PersistentCollections {
 
   static boolean areEqual(Object o1, Object o2) {
     return o1 == o2 || (o1 != null && o1.equals(o2));
+  }
+
+  public static <T> Set<T> asSet(PersistentSet<T> set) {
+    return new SetAdapter<T>(set);
+  }
+
+  public static <T> Collection<T> asCollection(PersistentCollection<T> collection) {
+    return new CollectionAdapter<T>(collection);
+  }
+
+  public static <T> List<T> asList(PersistentList<T> list) {
+    return new ListAdapter<T>(list);
+  }
+
+  public static <K, V> Map<K, V> asMap(PersistentMap<K, V> map) {
+    return new MapAdapter<K, V>(map);
   }
 }
