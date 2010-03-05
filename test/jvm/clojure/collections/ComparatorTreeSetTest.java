@@ -1,18 +1,22 @@
 package clojure.collections;
 
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.Set;
 
-public class ComparatorTreeSetTest extends SetTest<Number, TreeSet<Number>> {
+public class ComparatorTreeSetTest extends SetTest<Number, TreeSet<Number>, java.util.TreeSet<Number>> {
   static final Comparator<Number> COMPARATOR = new Comparator<Number>() {
     @Override
     public int compare(Number o1, Number o2) {
-      return o1.intValue() - o2.intValue();
+      if (o1.intValue() > o2.intValue()) {
+        return 1;
+      } else if (o1.intValue() < o2.intValue()) {
+        return -1;
+      } else {
+        return 0;
+      }
     }
   };
 
-  Set<Number> set = new java.util.TreeSet<Number>(COMPARATOR);
+  java.util.TreeSet<Number> set = new java.util.TreeSet<Number>(COMPARATOR);
 
   @Override
   protected TreeSet<Number> empty() {
@@ -20,8 +24,13 @@ public class ComparatorTreeSetTest extends SetTest<Number, TreeSet<Number>> {
   }
 
   @Override
-  protected Collection<Number> getCollection() {
+  protected java.util.TreeSet<Number> getCollection() {
     return set;
+  }
+
+  @Override
+  protected java.util.TreeSet<Number> cloneCollection() {
+    return (java.util.TreeSet) set.clone();
   }
 
   @Override

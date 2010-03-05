@@ -1,10 +1,8 @@
 package clojure.collections;
 
-import java.util.Collection;
-import java.util.Set;
 
-public class HashSetTest extends SetTest<String, HashSet<String>> {
-  Set<String> set = new java.util.HashSet<String>();
+public class HashSetTest extends SetTest<String, HashSet<String>, java.util.HashSet<String>> {
+  java.util.HashSet<String> set = new java.util.HashSet<String>();
 
   @Override
   protected HashSet<String> empty() {
@@ -12,8 +10,13 @@ public class HashSetTest extends SetTest<String, HashSet<String>> {
   }
 
   @Override
-  protected Collection<String> getCollection() {
+  protected java.util.HashSet<String> getCollection() {
     return set;
+  }
+
+  @Override
+  protected java.util.HashSet<String> cloneCollection() {
+    return (java.util.HashSet) set.clone();
   }
 
   @Override

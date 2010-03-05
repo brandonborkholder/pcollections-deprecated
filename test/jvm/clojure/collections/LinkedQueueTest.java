@@ -7,7 +7,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-public class LinkedQueueTest extends CollectionTest<String, PersistentQueue<String>> {
+public class LinkedQueueTest extends CollectionTest<String, PersistentQueue<String>, Queue<String>> {
   Queue<String> queue = new LinkedList<String>();
 
   @Test
@@ -61,11 +61,13 @@ public class LinkedQueueTest extends CollectionTest<String, PersistentQueue<Stri
   protected void pop() {
     pCollection = pCollection.pop();
     queue.poll();
+    checkpoint();
   }
 
   protected void offer(String value) {
     queue.offer(value);
     pCollection = pCollection.offer(value);
+    checkpoint();
   }
 
   @Override
@@ -79,13 +81,18 @@ public class LinkedQueueTest extends CollectionTest<String, PersistentQueue<Stri
   }
 
   @Override
+  protected Queue<String> cloneCollection() {
+    return new LinkedList<String>(queue);
+  }
+
+  @Override
   protected String random() {
     return String.valueOf(RAND.nextInt());
   }
 
   @Override
-  protected void assertEquivalent(PersistentQueue<String> pQueue) {
-    super.assertEquivalent(pCollection);
+  protected void assertEquivalent(Queue<String> queue, PersistentQueue<String> pQueue) {
+    super.assertEquivalent(queue, pQueue);
 
     Queue<String> newQueue = new LinkedList<String>();
     while (!pQueue.isEmpty()) {

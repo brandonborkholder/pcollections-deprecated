@@ -1,10 +1,12 @@
 package clojure.collections;
 
+import java.util.Set;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-public abstract class SetTest<T, C extends PersistentSet<T>> extends CollectionTest<T, C> {
+public abstract class SetTest<T, P extends PersistentSet<T>, C extends Set<T>> extends CollectionTest<T, P, C> {
   @Test
   public void simpleSetTest() {
     T value = random();

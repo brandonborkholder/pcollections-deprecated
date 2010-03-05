@@ -7,7 +7,7 @@ import java.util.HashSet;
 
 import org.junit.Test;
 
-public abstract class CollectionTest<T, C extends PersistentCollection<T>> extends AbstractTest<T, C> {
+public abstract class CollectionTest<T, P extends PersistentCollection<T>, C extends Collection<T>> extends AbstractTest<T, P, C> {
   @Test
   public void singleWithTest() {
     add(random());
@@ -80,9 +80,9 @@ public abstract class CollectionTest<T, C extends PersistentCollection<T>> exten
   }
 
   @Override
-  protected void assertEquivalent(C pCollection) {
-    assertEquals(getCollection().size(), pCollection.size());
-    for (T value : getCollection()) {
+  protected void assertEquivalent(C collection, P pCollection) {
+    assertEquals(collection.size(), pCollection.size());
+    for (T value : collection) {
       assertTrue(pCollection.contains(value));
     }
   }

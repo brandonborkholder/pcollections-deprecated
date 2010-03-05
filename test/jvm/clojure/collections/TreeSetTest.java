@@ -1,10 +1,8 @@
 package clojure.collections;
 
-import java.util.Collection;
-import java.util.Set;
 
-public class TreeSetTest extends SetTest<String, TreeSet<String>> {
-  Set<String> set = new java.util.TreeSet<String>();
+public class TreeSetTest extends SetTest<String, TreeSet<String>, java.util.TreeSet<String>> {
+  java.util.TreeSet<String> set = new java.util.TreeSet<String>();
 
   @Override
   protected TreeSet<String> empty() {
@@ -12,8 +10,13 @@ public class TreeSetTest extends SetTest<String, TreeSet<String>> {
   }
 
   @Override
-  protected Collection<String> getCollection() {
+  protected java.util.TreeSet<String> getCollection() {
     return set;
+  }
+
+  @Override
+  protected java.util.TreeSet<String> cloneCollection() {
+    return (java.util.TreeSet) set.clone();
   }
 
   @Override

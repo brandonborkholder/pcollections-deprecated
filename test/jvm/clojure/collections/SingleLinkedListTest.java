@@ -1,12 +1,11 @@
 package clojure.collections;
 
-import java.util.Collection;
 import java.util.Stack;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SingleLinkedListTest extends CollectionTest<String, PersistentStack<String>> {
+public class SingleLinkedListTest extends CollectionTest<String, PersistentStack<String>, Stack<String>> {
   Stack<String> stack = new Stack<String>();
 
   @Test
@@ -33,11 +32,13 @@ public class SingleLinkedListTest extends CollectionTest<String, PersistentStack
   public void push(String value) {
     pCollection = pCollection.push(value);
     stack.push(value);
+    checkpoint();
   }
 
   public void pop() {
     pCollection = pCollection.pop();
     stack.pop();
+    checkpoint();
   }
 
   @Override
@@ -52,13 +53,18 @@ public class SingleLinkedListTest extends CollectionTest<String, PersistentStack
   }
 
   @Override
-  protected Collection<String> getCollection() {
+  protected Stack<String> getCollection() {
     return stack;
   }
 
   @Override
-  protected void assertEquivalent(PersistentStack<String> pStack) {
-    super.assertEquivalent(pStack);
+  protected Stack<String> cloneCollection() {
+    return (Stack) stack.clone();
+  }
+
+  @Override
+  protected void assertEquivalent(Stack<String> stack, PersistentStack<String> pStack) {
+    super.assertEquivalent(stack, pStack);
 
     Stack<String> reverse = new Stack<String>();
     while (!pStack.isEmpty()) {
@@ -66,11 +72,11 @@ public class SingleLinkedListTest extends CollectionTest<String, PersistentStack
       pStack = pStack.pop();
     }
 
-    Stack<String> stack = new Stack<String>();
+    Stack<String> otherStack = new Stack<String>();
     while (!reverse.isEmpty()) {
-      stack.push(reverse.pop());
+      otherStack.push(reverse.pop());
     }
 
-    Assert.assertEquals(this.stack, stack);
+    Assert.assertEquals(stack, otherStack);
   }
 }
