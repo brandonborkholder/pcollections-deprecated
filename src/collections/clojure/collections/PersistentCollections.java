@@ -1,19 +1,20 @@
 package clojure.collections;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.RandomAccess;
 import java.util.Set;
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Map.Entry;
 
 import clojure.collections.adapt.CollectionAdapter;
 import clojure.collections.adapt.ListAdapter;
 import clojure.collections.adapt.MapAdapter;
+import clojure.collections.adapt.RandomListAdapter;
 import clojure.collections.adapt.SetAdapter;
 
 /**
@@ -59,15 +60,6 @@ public class PersistentCollections {
     return set;
   }
 
-  public static <E> PersistentStack<E> reverse(PersistentStack<E> stack) {
-    PersistentStack<E> newStack = SingleLinkedList.empty();
-    for (E value : stack) {
-      newStack = newStack.push(value);
-    }
-
-    return newStack;
-  }
-
   static <T> PersistentStack<T> withoutHelper(PersistentStack<T> pList, Object item) {
     if (pList.isEmpty()) {
       return null;
@@ -97,33 +89,6 @@ public class PersistentCollections {
         return stack.push(pList.peek());
       }
     }
-  }
-
-  static <T> Iterable<Entry<T, T>> expandIterable(final Iterable<T> iterable) {
-    return new Iterable<Entry<T, T>>() {
-      @Override
-      public Iterator<Entry<T, T>> iterator() {
-        return new Iterator<Entry<T, T>>() {
-          Iterator<T> itr = iterable.iterator();
-
-          @Override
-          public boolean hasNext() {
-            return itr.hasNext();
-          }
-
-          @Override
-          public Entry<T, T> next() {
-            T value = itr.next();
-            return new SimpleImmutableEntry<T, T>(value, value);
-          }
-
-          @Override
-          public void remove() {
-            throw new UnsupportedOperationException();
-          }
-        };
-      }
-    };
   }
 
   static boolean orderAwareEquals(PersistentCollection<?> a, PersistentCollection<?> b) {
@@ -181,6 +146,48 @@ public class PersistentCollections {
     return o1 == o2 || (o1 != null && o1.equals(o2));
   }
 
+  public static <T extends Comparable<? super T>> T min(PersistentCollection<T> pCollection) {
+    return Collections.min(asCollection(pCollection));
+  }
+
+  public static <T> T min(PersistentCollection<T> pCollection, Comparator<? super T> comparator) {
+    return Collections.min(asCollection(pCollection), comparator);
+  }
+
+  public static <T extends Comparable<? super T>> T max(PersistentCollection<T> pCollection) {
+    return Collections.max(asCollection(pCollection));
+  }
+
+  public static <T> T max(PersistentCollection<T> pCollection, Comparator<? super T> comparator) {
+    return Collections.max(asCollection(pCollection), comparator);
+  }
+
+  public static <T extends Comparable<? super T>> int binarySearch(PersistentList<T> list, T key) {
+    return Collections.binarySearch(asList(list), key);
+  }
+
+  public static <T> int binarySearch(PersistentList<T> list, T key, Comparator<? super T> comparator) {
+    return Collections.binarySearch(asList(list), key, comparator);
+  }
+
+  public static <T, P extends PersistentCollection<T>> P intersection(P a, P b) {
+    Set<T> unwanted = new HashSet<T>(asCollection(a));
+    for (T value : b) {
+      unwanted.remove(value);
+    }
+
+    return (P) a.withoutAll(unwanted);
+  }
+
+  public static <E> PersistentStack<E> reverse(PersistentStack<E> stack) {
+    PersistentStack<E> newStack = SingleLinkedList.empty();
+    for (E value : stack) {
+      newStack = newStack.push(value);
+    }
+
+    return newStack;
+  }
+
   public static <T> Set<T> asSet(PersistentSet<T> set) {
     return new SetAdapter<T>(set);
   }
@@ -190,7 +197,11 @@ public class PersistentCollections {
   }
 
   public static <T> List<T> asList(PersistentList<T> list) {
-    return new ListAdapter<T>(list);
+    if (list instanceof RandomAccess) {
+      return new RandomListAdapter<T>(list);
+    } else {
+      return new ListAdapter<T>(list);
+    }
   }
 
   public static <K, V> Map<K, V> asMap(PersistentMap<K, V> map) {

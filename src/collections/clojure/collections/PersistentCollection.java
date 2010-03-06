@@ -29,7 +29,7 @@ public interface PersistentCollection<T> extends Iterable<T> {
    *
    * @param value
    *          the value to include in the collection
-   * @return a (possibly) new collection that contains the given value
+   * @return a collection that contains the given value
    */
   PersistentCollection<T> with(T value);
 
@@ -42,7 +42,7 @@ public interface PersistentCollection<T> extends Iterable<T> {
    *
    * @param values
    *          an {@code Iterable} representing all the values to add
-   * @return a (possibly) new collection that contains all the given values
+   * @return a collection that contains all the given values
    */
   PersistentCollection<T> withAll(Iterable<? extends T> values);
 
@@ -53,8 +53,8 @@ public interface PersistentCollection<T> extends Iterable<T> {
    *
    * @param value
    *          the value to remove
-   * @return a (possibly) new collection that does not contain the given value
-   *         in the first place it occurs
+   * @return a collection that does not contain the given value in the first
+   *         place it occurs
    */
   PersistentCollection<T> without(Object value);
 
@@ -65,8 +65,8 @@ public interface PersistentCollection<T> extends Iterable<T> {
    *
    * @param values
    *          the values to remove
-   * @return a (possibly) new collection that does not contain any of the values
-   *         from {@code values}
+   * @return a collection that does not contain any of the values from {@code
+   *         values}
    */
   PersistentCollection<T> withoutAll(Iterable<?> values);
 
