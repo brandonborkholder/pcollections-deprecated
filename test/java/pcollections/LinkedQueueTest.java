@@ -7,7 +7,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import pcollections.LinkedQueue;
+import pcollections.DoubleStackQueue;
 import pcollections.PersistentQueue;
 
 public class LinkedQueueTest extends CollectionTest<String, PersistentQueue<String>, Queue<String>> {
@@ -75,7 +75,7 @@ public class LinkedQueueTest extends CollectionTest<String, PersistentQueue<Stri
 
   @Override
   protected PersistentQueue<String> empty() {
-    return LinkedQueue.empty();
+    return DoubleStackQueue.empty();
   }
 
   @Override

@@ -12,18 +12,18 @@ import java.util.Iterator;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public class LinkedQueue<T> extends AbstractCollection<T> implements PersistentQueue<T> {
-  private static final LinkedQueue EMPTY = new LinkedQueue(SingleLinkedList.empty(), SingleLinkedList.empty());
+public class DoubleStackQueue<T> extends AbstractCollection<T> implements PersistentQueue<T> {
+  private static final DoubleStackQueue EMPTY = new DoubleStackQueue(SingleLinkedList.empty(), SingleLinkedList.empty());
 
   protected final PersistentStack<T> front;
 
   protected final PersistentStack<T> rear;
 
-  public static <T> LinkedQueue<T> empty() {
+  public static <T> DoubleStackQueue<T> empty() {
     return EMPTY;
   }
 
-  protected LinkedQueue(PersistentStack<T> front, PersistentStack<T> rear) {
+  protected DoubleStackQueue(PersistentStack<T> front, PersistentStack<T> rear) {
     this.front = front;
     this.rear = rear;
   }
@@ -66,10 +66,10 @@ public class LinkedQueue<T> extends AbstractCollection<T> implements PersistentQ
       if (newRear == null) {
         return this;
       } else {
-        return new LinkedQueue<T>(front, newRear);
+        return new DoubleStackQueue<T>(front, newRear);
       }
     } else {
-      return new LinkedQueue<T>(newFront, rear);
+      return new DoubleStackQueue<T>(newFront, rear);
     }
   }
 
@@ -90,7 +90,7 @@ public class LinkedQueue<T> extends AbstractCollection<T> implements PersistentQ
       newRear = SingleLinkedList.empty();
     }
 
-    return new LinkedQueue<T>(newFront, newRear);
+    return new DoubleStackQueue<T>(newFront, newRear);
   }
 
   @Override
@@ -102,15 +102,15 @@ public class LinkedQueue<T> extends AbstractCollection<T> implements PersistentQ
       newRear = SingleLinkedList.empty();
     }
 
-    return new LinkedQueue<T>(newFront, newRear);
+    return new DoubleStackQueue<T>(newFront, newRear);
   }
 
   @Override
   public PersistentQueue<T> offer(T value) {
     if (front.isEmpty()) {
-      return new LinkedQueue<T>(front.push(value), rear);
+      return new DoubleStackQueue<T>(front.push(value), rear);
     } else {
-      return new LinkedQueue<T>(front, rear.push(value));
+      return new DoubleStackQueue<T>(front, rear.push(value));
     }
   }
 
@@ -131,9 +131,9 @@ public class LinkedQueue<T> extends AbstractCollection<T> implements PersistentQ
   }
 
   protected class Itr extends ImmutableItr<T> {
-    Iterator<T> firstItr = LinkedQueue.this.front.iterator();
+    Iterator<T> firstItr = DoubleStackQueue.this.front.iterator();
 
-    Iterator<T> secondItr = PersistentCollections.reverse(LinkedQueue.this.rear).iterator();
+    Iterator<T> secondItr = PersistentCollections.reverse(DoubleStackQueue.this.rear).iterator();
 
     @Override
     public boolean hasNext() {

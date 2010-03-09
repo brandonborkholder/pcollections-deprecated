@@ -14,7 +14,7 @@ import clojure.lang.IPersistentMap;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public abstract class ClojureMap<K, V> extends AbstractMap<K, V> {
+abstract class ClojureMap<K, V> extends AbstractMap<K, V> {
   private static final Object NOTFOUND = new Object();
 
   protected final IPersistentMap map;

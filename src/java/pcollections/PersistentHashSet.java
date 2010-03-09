@@ -1,7 +1,5 @@
 package pcollections;
 
-import java.util.Comparator;
-
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
  * distribution terms for this software are covered by the Eclipse Public
@@ -11,18 +9,12 @@ import java.util.Comparator;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public class TreeSet<T> extends BaseSet<T> {
-  static final TreeSet EMPTY = new TreeSet(TreeMap.EMPTY);
-
-  public static <T extends Comparable<T>> TreeSet<T> empty() {
-    return EMPTY;
+public class PersistentHashSet<T> extends BaseSet<T> {
+  public static <T> PersistentHashSet<T> empty() {
+    return new PersistentHashSet<T>(PersistentHashMap.<T, T> empty());
   }
 
-  public static <T> TreeSet<T> empty(Comparator<T> comparator) {
-    return new TreeSet<T>(TreeMap.empty(comparator));
-  }
-
-  protected TreeSet(TreeMap<T, ?> map) {
+  protected PersistentHashSet(PersistentHashMap<T, ?> map) {
     super(map);
   }
 }

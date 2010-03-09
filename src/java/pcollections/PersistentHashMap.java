@@ -1,9 +1,6 @@
 package pcollections;
 
-import java.util.Comparator;
-
 import clojure.lang.IPersistentMap;
-import clojure.lang.PersistentTreeMap;
 
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
@@ -14,23 +11,19 @@ import clojure.lang.PersistentTreeMap;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public class TreeMap<K, V> extends ClojureMap<K, V> {
-  static final TreeMap EMPTY = new TreeMap(PersistentTreeMap.EMPTY);
+public class PersistentHashMap<K, V> extends ClojureMap<K, V> {
+  private static final PersistentHashMap EMPTY = new PersistentHashMap(clojure.lang.PersistentHashMap.EMPTY);
 
-  public static <K, V> TreeMap<K, V> empty(Comparator<K> comparator) {
-    return new TreeMap<K, V>(new PersistentTreeMap(null, comparator));
-  }
-
-  public static <K extends Comparable<K>, V> TreeMap<K, V> empty() {
+  public static <K, V> PersistentHashMap<K, V> empty() {
     return EMPTY;
   }
 
-  protected TreeMap(IPersistentMap map) {
+  protected PersistentHashMap(IPersistentMap map) {
     super(map);
   }
 
   @Override
   protected PersistentMap<K, V> wrap(IPersistentMap map) {
-    return new TreeMap<K, V>(map);
+    return new PersistentHashMap<K, V>(map);
   }
 }

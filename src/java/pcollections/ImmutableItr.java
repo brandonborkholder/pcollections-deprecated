@@ -11,7 +11,7 @@ import java.util.Iterator;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public abstract class ImmutableItr<T> implements Iterator<T> {
+abstract class ImmutableItr<T> implements Iterator<T> {
   @Override
   public void remove() {
     throw new UnsupportedOperationException();

@@ -12,7 +12,7 @@ import java.util.Map.Entry;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public class BaseSet<T> extends AbstractCollection<T> implements PersistentSet<T> {
+class BaseSet<T> extends AbstractCollection<T> implements PersistentSet<T> {
   protected final PersistentMap<T, ?> map;
 
   public BaseSet(PersistentMap<T, ?> map) {

@@ -1,14 +1,14 @@
 package pcollections;
 
-import pcollections.HashSet;
+import pcollections.PersistentHashSet;
 
 
-public class HashSetTest extends SetTest<String, HashSet<String>, java.util.HashSet<String>> {
+public class HashSetTest extends SetTest<String, PersistentHashSet<String>, java.util.HashSet<String>> {
   java.util.HashSet<String> set = new java.util.HashSet<String>();
 
   @Override
-  protected HashSet<String> empty() {
-    return HashSet.empty();
+  protected PersistentHashSet<String> empty() {
+    return PersistentHashSet.empty();
   }
 
   @Override

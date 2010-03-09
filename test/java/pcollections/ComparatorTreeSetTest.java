@@ -2,9 +2,9 @@ package pcollections;
 
 import java.util.Comparator;
 
-import pcollections.TreeSet;
+import pcollections.PersistentTreeSet;
 
-public class ComparatorTreeSetTest extends SetTest<Number, TreeSet<Number>, java.util.TreeSet<Number>> {
+public class ComparatorTreeSetTest extends SetTest<Number, PersistentTreeSet<Number>, java.util.TreeSet<Number>> {
   static final Comparator<Number> COMPARATOR = new Comparator<Number>() {
     @Override
     public int compare(Number o1, Number o2) {
@@ -21,8 +21,8 @@ public class ComparatorTreeSetTest extends SetTest<Number, TreeSet<Number>, java
   java.util.TreeSet<Number> set = new java.util.TreeSet<Number>(COMPARATOR);
 
   @Override
-  protected TreeSet<Number> empty() {
-    return TreeSet.empty(COMPARATOR);
+  protected PersistentTreeSet<Number> empty() {
+    return PersistentTreeSet.empty(COMPARATOR);
   }
 
   @Override

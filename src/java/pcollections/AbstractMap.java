@@ -11,7 +11,7 @@ import java.util.Map.Entry;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public abstract class AbstractMap<K, V> implements PersistentMap<K, V> {
+abstract class AbstractMap<K, V> implements PersistentMap<K, V> {
   protected int hashCode = -1;
 
   @Override

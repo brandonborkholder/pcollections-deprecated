@@ -1,14 +1,14 @@
 package pcollections;
 
-import pcollections.TreeSet;
+import pcollections.PersistentTreeSet;
 
 
-public class TreeSetTest extends SetTest<String, TreeSet<String>, java.util.TreeSet<String>> {
+public class TreeSetTest extends SetTest<String, PersistentTreeSet<String>, java.util.TreeSet<String>> {
   java.util.TreeSet<String> set = new java.util.TreeSet<String>();
 
   @Override
-  protected TreeSet<String> empty() {
-    return TreeSet.empty();
+  protected PersistentTreeSet<String> empty() {
+    return PersistentTreeSet.empty();
   }
 
   @Override

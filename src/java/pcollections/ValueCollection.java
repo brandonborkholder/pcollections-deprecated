@@ -13,7 +13,7 @@ import java.util.Map.Entry;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public class ValueCollection<T> extends AbstractCollection<T> {
+class ValueCollection<T> extends AbstractCollection<T> {
   protected final PersistentMap<?, T> map;
 
   protected final PersistentStack<T> appended;

@@ -9,7 +9,7 @@ package pcollections;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public abstract class AbstractCollection<T> implements PersistentCollection<T> {
+abstract class AbstractCollection<T> implements PersistentCollection<T> {
   protected int hashCode = -1;
 
   @Override
