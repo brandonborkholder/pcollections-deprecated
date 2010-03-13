@@ -1,0 +1,26 @@
+*  Persistent Collections for Java
+*
+* Copyright (c) Brandon Borkholder. All rights reserved. The use and
+* distribution terms for this software are covered by the Eclipse Public
+* License 1.0 (http://opensource.org/licenses/eclipse-1.0.php) which can be
+* found in the file epl-v10.html at the root of this distribution. By using
+* this software in any fashion, you are agreeing to be bound by the terms of
+* this license. You must not remove this notice, or any other, from this
+* software.
+
+This library currently depends on the Clojure runtime, which can be obtained
+directly from http://clojure.org.
+
+-------------------------------------------------------------------------------
+
+This program uses the Clojure library which is distributed under the Eclipse
+Public License 1.0 under the following statement:
+
+Copyright (c) Rich Hickey. All rights reserved.
+The use and distribution terms for this software are covered by the
+Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
+which can be found in the file epl-v10.html at the root of this distribution.
+By using this software in any fashion, you are agreeing to be bound by
+ the terms of this license.
+You must not remove this notice, or any other, from this software.
+
