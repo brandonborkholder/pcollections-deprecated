@@ -1,6 +1,6 @@
 package pcollections;
 
-import java.util.Map.Entry;
+import java.util.Map;
 
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
@@ -12,6 +12,8 @@ import java.util.Map.Entry;
  * software.
  */
 abstract class AbstractMap<K, V> implements PersistentMap<K, V> {
+  static final String PERSISTENT_ERROR = "Cannot modify persistent map.";
+
   protected int hashCode = -1;
 
   @Override
@@ -59,4 +61,29 @@ abstract class AbstractMap<K, V> implements PersistentMap<K, V> {
   }
 
   protected abstract int hash();
+
+  @Override
+  public PersistentSet<Entry<K, V>> entrySet() {
+    return new EntrySet<K, V>(this);
+  }
+
+  @Override
+  public void clear() {
+    throw new UnsupportedOperationException(PERSISTENT_ERROR);
+  }
+
+  @Override
+  public V put(K key, V value) {
+    throw new UnsupportedOperationException(PERSISTENT_ERROR);
+  }
+
+  @Override
+  public void putAll(Map<? extends K, ? extends V> m) {
+    throw new UnsupportedOperationException(PERSISTENT_ERROR);
+  }
+
+  @Override
+  public V remove(Object key) {
+    throw new UnsupportedOperationException(PERSISTENT_ERROR);
+  }
 }

@@ -1,8 +1,6 @@
 package pcollections;
 
 import java.util.Iterator;
-import java.util.Map.Entry;
-
 import clojure.lang.IPersistentMap;
 
 /**
@@ -39,7 +37,7 @@ abstract class ClojureMap<K, V> extends AbstractMap<K, V> {
   }
 
   @Override
-  public V get(K key) {
+  public V get(Object key) {
     return (V) map.valAt(key);
   }
 

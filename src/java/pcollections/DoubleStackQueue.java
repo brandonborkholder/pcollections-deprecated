@@ -54,7 +54,7 @@ public class DoubleStackQueue<T> extends AbstractCollection<T> implements Persis
   }
 
   @Override
-  public PersistentQueue<T> withAll(Iterable<? extends T> values) {
+  public PersistentQueue<T> withAll(Collection<? extends T> values) {
     return (PersistentQueue<T>) super.withAll(values);
   }
 
@@ -74,7 +74,7 @@ public class DoubleStackQueue<T> extends AbstractCollection<T> implements Persis
   }
 
   @Override
-  public PersistentQueue<T> withoutAll(Iterable<?> values) {
+  public PersistentQueue<T> withoutAll(Collection<?> values) {
     Collection<?> collection = PersistentCollections.toSet(values);
     PersistentStack<T> newFront = PersistentCollections.withoutHelper(front, collection);
     PersistentStack<T> newRear = PersistentCollections.withoutHelper(rear, collection);

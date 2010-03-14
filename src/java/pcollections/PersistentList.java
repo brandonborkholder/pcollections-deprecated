@@ -1,5 +1,8 @@
 package pcollections;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
  * distribution terms for this software are covered by the Eclipse Public
@@ -9,19 +12,7 @@ package pcollections;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public interface PersistentList<T> extends PersistentCollection<T> {
-  /**
-   * Returns the value at the given index.
-   *
-   * @param index
-   *          the index for which to get the value
-   * @return the value at the given index
-   * @throws IndexOutOfBoundsException
-   *           if the index is out of range (i.e.
-   *           <tt>index &lt; 0 || index &gt;= size()</tt>)
-   */
-  T get(int index);
-
+public interface PersistentList<T> extends PersistentCollection<T>, List<T> {
   /**
    * Returns a new {@code PersistentList} with the given value appended to the
    * end of the contents of this list.
@@ -44,7 +35,7 @@ public interface PersistentList<T> extends PersistentCollection<T> {
    *         order
    */
   @Override
-  PersistentList<T> withAll(Iterable<? extends T> values);
+  PersistentList<T> withAll(Collection<? extends T> values);
 
   /**
    * Returns a new {@code PersistentList} with {@code value} at index {@code
@@ -60,26 +51,6 @@ public interface PersistentList<T> extends PersistentCollection<T> {
    *           if the index is out of range
    */
   PersistentList<T> with(int index, T value);
-
-  /**
-   * Returns the first index of the specified value in this list. If this list
-   * does not contain the value, it returns -1.
-   *
-   * @param value
-   *          the value for which to search
-   * @return the index of the value in this list, or -1 if not found
-   */
-  int indexOf(Object value);
-
-  /**
-   * Returns the last index of the specified value in this list. If this list
-   * does not contain the value, it returns -1.
-   *
-   * @param value
-   *          the value for which to search
-   * @return the index of the value in this list, or -1 if not found
-   */
-  int lastIndexOf(Object value);
 
   /**
    * Returns a {@code PersistentList} which does not contain the first
@@ -107,7 +78,7 @@ public interface PersistentList<T> extends PersistentCollection<T> {
    *         in the given {@code Iterable}
    */
   @Override
-  PersistentList<T> withoutAll(Iterable<?> values);
+  PersistentList<T> withoutAll(Collection<?> values);
 
   /**
    * Returns a {@code PersistentList} which is has removed the value at index
@@ -140,5 +111,22 @@ public interface PersistentList<T> extends PersistentCollection<T> {
    *           if the indexes are not contained within this list or are
    *           decreasing
    */
+  @Override
   PersistentList<T> subList(int fromIndex, int toIndex);
+
+  @Override
+  @Deprecated
+  void add(int index, T element);
+
+  @Override
+  @Deprecated
+  boolean addAll(int index, Collection<? extends T> c);
+
+  @Override
+  @Deprecated
+  public T remove(int index);
+
+  @Override
+  @Deprecated
+  T set(int index, T element);
 }

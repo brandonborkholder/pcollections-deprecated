@@ -1,5 +1,7 @@
 package pcollections;
 
+import java.util.Collection;
+
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
  * distribution terms for this software are covered by the Eclipse Public
@@ -10,10 +12,12 @@ package pcollections;
  * software.
  */
 abstract class AbstractCollection<T> implements PersistentCollection<T> {
+  static final String PERSISTENT_ERROR = "Cannot modify persistent collection.";
+
   protected int hashCode = -1;
 
   @Override
-  public PersistentCollection<T> withAll(Iterable<? extends T> values) {
+  public PersistentCollection<T> withAll(Collection<? extends T> values) {
     PersistentCollection<T> collection = this;
     for (T value : values) {
       collection = collection.with(value);
@@ -23,7 +27,7 @@ abstract class AbstractCollection<T> implements PersistentCollection<T> {
   }
 
   @Override
-  public boolean containsAll(Iterable<?> values) {
+  public boolean containsAll(Collection<?> values) {
     for (Object value : values) {
       if (!contains(value)) {
         return false;
@@ -65,4 +69,57 @@ abstract class AbstractCollection<T> implements PersistentCollection<T> {
   }
 
   protected abstract int hash();
+
+  @Override
+  public Object[] toArray() {
+    return toArray(null);
+  }
+
+  @Override
+  public <U extends Object> U[] toArray(U[] array) {
+    int size = size();
+    U[] r = array.length >= size ? array : (U[]) java.lang.reflect.Array.newInstance(array.getClass().getComponentType(), size);
+    iterator();
+
+    int count = 0;
+    for (T value : this) {
+      r[count++] = (U) value;
+    }
+
+    if (count < r.length - 1) {
+      r[count] = null;
+    }
+
+    return r;
+  }
+
+  @Override
+  public boolean add(T e) {
+    throw new UnsupportedOperationException(PERSISTENT_ERROR);
+  }
+
+  @Override
+  public boolean addAll(Collection<? extends T> c) {
+    throw new UnsupportedOperationException(PERSISTENT_ERROR);
+  }
+
+  @Override
+  public void clear() {
+    throw new UnsupportedOperationException(PERSISTENT_ERROR);
+  }
+
+  @Override
+  public boolean remove(Object o) {
+    throw new UnsupportedOperationException(PERSISTENT_ERROR);
+  }
+
+  @Override
+  public boolean removeAll(Collection<?> c) {
+    throw new UnsupportedOperationException(PERSISTENT_ERROR);
+  }
+
+  @Override
+  public boolean retainAll(Collection<?> c) {
+    throw new UnsupportedOperationException(PERSISTENT_ERROR);
+  }
 }

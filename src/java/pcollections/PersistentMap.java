@@ -1,5 +1,6 @@
 package pcollections;
 
+import java.util.Map;
 import java.util.Map.Entry;
 
 /**
@@ -25,7 +26,7 @@ import java.util.Map.Entry;
  * @author Brandon Borkholder
  * @version March 12, 2010
  */
-public interface PersistentMap<K, V> extends Iterable<Entry<K, V>> {
+public interface PersistentMap<K, V> extends Iterable<Entry<K, V>>, Map<K, V> {
   /**
    * Returns a {@code PersistentMap} which maps {@code key} to {@code value}. If
    * this map already contains an entry for {@code key}, the new map replaces
@@ -122,54 +123,22 @@ public interface PersistentMap<K, V> extends Iterable<Entry<K, V>> {
    */
   PersistentCollection<V> values();
 
-  V get(K key);
-
-  boolean containsKey(Object key);
-
-  boolean containsValue(Object value);
-
-  /**
-   * Returns the number of entries in this map. If this number is more than
-   * {@link Integer#MAX_VALUE}, returns {@code Integer.MAX_VALUE}.
-   *
-   * @return number of entries in the map
-   */
-  int size();
-
-  /**
-   * Returns {@code true} if and only if this map contains no entries. This is
-   * equivalent to the test {@code size() == 0}.
-   *
-   * @return {@code true} if the map is empty, {@code false} otherwise
-   */
-  boolean isEmpty();
-
-  /**
-   * Returns {@code true} if the given object is also a {@code PersistentMap}
-   * and has equal content with this {@code PersistentMap}. Two {@code
-   * PersistentMap}s are equal if their sets of keys are equal and for each key,
-   * the two maps produce values which are equal to each other.
-   *
-   * <p>
-   * Note that a {@code PersistentMap} is never equal to a {@code java.util.Map}
-   * .
-   * </p>
-   *
-   * @param obj
-   *          the object to check for equality
-   * @return {@code true} if the given object is equal to this
-   */
   @Override
-  boolean equals(Object obj);
+  public PersistentSet<Entry<K, V>> entrySet();
 
-  /**
-   * Returns the hash code value for this object. The hash code for a {@code
-   * PersistentMap} is defined to be the sum of the hash codes of each pair of
-   * key and value. The hash code for a key/value pair is the hash code of the
-   * key xor'ed with the hash code of the value.
-   *
-   * @return the hash code for this map
-   */
   @Override
-  int hashCode();
+  @Deprecated
+  V put(K key, V value);
+
+  @Override
+  @Deprecated
+  public void clear();
+
+  @Override
+  @Deprecated
+  public void putAll(Map<? extends K, ? extends V> m);
+
+  @Override
+  @Deprecated
+  public V remove(Object key);
 }

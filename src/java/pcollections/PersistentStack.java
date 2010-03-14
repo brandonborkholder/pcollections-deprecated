@@ -1,5 +1,7 @@
 package pcollections;
 
+import java.util.Collection;
+
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
  * distribution terms for this software are covered by the Eclipse Public
@@ -14,13 +16,13 @@ public interface PersistentStack<T> extends PersistentCollection<T> {
   PersistentStack<T> with(T value);
 
   @Override
-  PersistentStack<T> withAll(Iterable<? extends T> values);
+  PersistentStack<T> withAll(Collection<? extends T> values);
 
   @Override
   PersistentStack<T> without(Object value);
 
   @Override
-  PersistentStack<T> withoutAll(Iterable<?> values);
+  PersistentStack<T> withoutAll(Collection<?> values);
 
   T peek();
 

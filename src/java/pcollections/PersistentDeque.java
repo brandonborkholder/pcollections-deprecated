@@ -1,5 +1,7 @@
 package pcollections;
 
+import java.util.Collection;
+
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
  * distribution terms for this software are covered by the Eclipse Public
@@ -14,13 +16,13 @@ public interface PersistentDeque<T> extends PersistentQueue<T>, PersistentStack<
   PersistentDeque<T> with(T value);
 
   @Override
-  PersistentDeque<T> withAll(Iterable<? extends T> value);
+  PersistentDeque<T> withAll(Collection<? extends T> value);
 
   @Override
   PersistentDeque<T> without(Object value);
 
   @Override
-  PersistentDeque<T> withoutAll(Iterable<?> values);
+  PersistentDeque<T> withoutAll(Collection<?> values);
 
   @Override
   PersistentDeque<T> pop();

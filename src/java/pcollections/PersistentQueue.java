@@ -1,5 +1,7 @@
 package pcollections;
 
+import java.util.Collection;
+
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
  * distribution terms for this software are covered by the Eclipse Public
@@ -14,17 +16,17 @@ public interface PersistentQueue<T> extends PersistentCollection<T> {
   PersistentQueue<T> with(T value);
 
   @Override
-  PersistentQueue<T> withAll(Iterable<? extends T> values);
+  PersistentQueue<T> withAll(Collection<? extends T> values);
 
   @Override
   PersistentQueue<T> without(Object value);
 
   @Override
-  PersistentQueue<T> withoutAll(Iterable<?> values);
+  PersistentQueue<T> withoutAll(Collection<?> values);
 
   T peek();
 
   PersistentQueue<T> pop();
 
-  PersistentQueue<T> offer(T value);
+  PersistentQueue<T> offer(T e);
 }

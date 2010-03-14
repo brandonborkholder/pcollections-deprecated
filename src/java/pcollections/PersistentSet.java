@@ -1,5 +1,8 @@
 package pcollections;
 
+import java.util.Collection;
+import java.util.Set;
+
 /**
  * Copyright (c) Brandon Borkholder. All rights reserved. The use and
  * distribution terms for this software are covered by the Eclipse Public
@@ -9,16 +12,16 @@ package pcollections;
  * this license. You must not remove this notice, or any other, from this
  * software.
  */
-public interface PersistentSet<T> extends PersistentCollection<T> {
+public interface PersistentSet<T> extends PersistentCollection<T>, Set<T> {
   @Override
   PersistentSet<T> with(T value);
 
   @Override
-  PersistentSet<T> withAll(Iterable<? extends T> values);
+  PersistentSet<T> withAll(Collection<? extends T> values);
 
   @Override
   PersistentSet<T> without(Object value);
 
   @Override
-  PersistentSet<T> withoutAll(Iterable<?> values);
+  PersistentSet<T> withoutAll(Collection<?> values);
 }

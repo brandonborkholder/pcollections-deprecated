@@ -1,5 +1,6 @@
 package pcollections;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -40,7 +41,7 @@ class BaseSet<T> extends AbstractCollection<T> implements PersistentSet<T> {
   }
 
   @Override
-  public PersistentSet<T> withAll(Iterable<? extends T> values) {
+  public PersistentSet<T> withAll(Collection<? extends T> values) {
     PersistentMap<T, ?> newMap = map;
     for (T value : values) {
       newMap = newMap.with(value, null);
@@ -55,7 +56,7 @@ class BaseSet<T> extends AbstractCollection<T> implements PersistentSet<T> {
   }
 
   @Override
-  public PersistentSet<T> withoutAll(Iterable<?> values) {
+  public PersistentSet<T> withoutAll(Collection<?> values) {
     return wrap(map.withoutAll(values));
   }
 

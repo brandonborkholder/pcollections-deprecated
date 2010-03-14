@@ -1,5 +1,6 @@
 package pcollections;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -63,7 +64,7 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
   }
 
   @Override
-  public PersistentStack<T> withAll(Iterable<? extends T> values) {
+  public PersistentStack<T> withAll(Collection<? extends T> values) {
     return (PersistentStack<T>) super.withAll(values);
   }
 
@@ -78,7 +79,7 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
   }
 
   @Override
-  public PersistentStack<T> withoutAll(Iterable<?> values) {
+  public PersistentStack<T> withoutAll(Collection<?> values) {
     PersistentStack<T> stack = PersistentCollections.withoutHelper(this, PersistentCollections.toSet(values));
     if (stack == null) {
       return this;
@@ -148,7 +149,7 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
     }
 
     @Override
-    public boolean containsAll(Iterable<?> values) {
+    public boolean containsAll(Collection<?> values) {
       return false;
     }
 
@@ -178,7 +179,7 @@ public class SingleLinkedList<T> extends AbstractCollection<T> implements Persis
     }
 
     @Override
-    public PersistentStack<T> withoutAll(Iterable<?> values) {
+    public PersistentStack<T> withoutAll(Collection<?> values) {
       return this;
     }
   }

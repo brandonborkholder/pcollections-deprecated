@@ -38,7 +38,7 @@ class ValueCollection<T> extends AbstractCollection<T> {
   }
 
   @Override
-  public PersistentCollection<T> withAll(Iterable<? extends T> values) {
+  public PersistentCollection<T> withAll(Collection<? extends T> values) {
     return new ValueCollection<T>(map, appended.withAll(values));
   }
 
@@ -61,7 +61,7 @@ class ValueCollection<T> extends AbstractCollection<T> {
   }
 
   @Override
-  public PersistentCollection<T> withoutAll(Iterable<?> values) {
+  public PersistentCollection<T> withoutAll(Collection<?> values) {
     Collection<?> collection = PersistentCollections.toSet(values);
     PersistentMap<?, T> newMap = map;
     Iterator<? extends Entry<?, T>> itr = map.iterator();
